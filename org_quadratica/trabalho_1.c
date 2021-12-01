@@ -24,10 +24,10 @@ void troca_buble(int vet[], int j)
 int buble(int vet[], int n)
 {
     int i, j, flag = 1, cont = 0;
-    for(i=0; i<n;i++)  //Quantidade de vezes que o j vai percorrer o vetor no pior caso possivel
+    for(i=0; i<n-1;i++)  //Quantidade de vezes que o j vai percorrer o vetor no pior caso possivel
     {
         flag = 1; //Vai mudar para 1 quando comecar o laco
-        for(j=0; j<n;j++) //Percorre o vetor
+        for(j=0; j<n-1;j++) //Percorre o vetor
         {    
             cont += 1; //Contabiliza as comparacoes feitas no vetor
             if(vet[j] > vet[j+1]) //se o valor da posicao j no vetor for maior que o proximo faz a troca
@@ -71,27 +71,19 @@ int insertion_sort(int vet[], int n)
     for(i=1;i<n;i++)
     {
         aux = vet[i]; //Recebe o valor que está na posição i do vetor
-        j = i -1; 
-        cont++; 
-        while(aux < vet[j] && j>=0)
+        j = i - 1; 
+        if(aux>vet[j]) cont++;
+        while(aux < vet[j] && j>=0) //Se o aux for menor que o valor na posição j e j maior ou igual a 0 faz as trocas
         {
-            vet[j+1] = vet[j];
+            vet[j+1] = vet[j]; //Move cada elemento uma posição a direita
             j--;
             cont++;
         }
-        vet[j+1] = aux;
+        vet[j+1] = aux; //Insere o aux na posição ordenada
     }
     return cont;
 }
 
-void printVet(int vet[], int n)
-{
-    int i;
-    for(i = 0; i<n; i++)
-    {
-        printf("valor %d: %d\n", i, vet[i]);
-    } 
-}
 
 void cria_vetor(int vet_buble[], int vet_selection[], int vet_insertion[], int tamanho)
 {
@@ -129,33 +121,30 @@ void cria_vetor(int vet_buble[], int vet_selection[], int vet_insertion[], int t
     }
 }
 
+
 int main()
 {
-    printf("Digite o tamanho do vetor: ");
-    int n, i, cont, opc = 1; 
+    int n, i, cont; 
     double time;
     clock_t start, end;
+    printf("Digite o tamanho do vetor: ");
     scanf("%d", &n);
     int vet_buble[n], vet_selection[n], vet_insertion[n]; //Cria os vetores que vão ser ordenados
     cria_vetor(vet_buble, vet_selection, vet_insertion, n); //Insere o valor nos vetores
-    printVet(vet_buble, n);
-    start = clock();
+    start = clock(); //Conta o tempo de buble
     cont = buble(vet_buble, n); //Ordena o vetor do buble
     end = clock();
-    time =((double)end - start)/CLOCKS_PER_SEC;
-    printVet(&vet_buble, n);    
+    time =((double)end - start)/CLOCKS_PER_SEC;    
     printf("Tempo Buble: %lf ms, Comparacoes: %d \n", time*1000, cont);
-    start = clock();
+    start = clock();//Conta o tempo de selection
     cont = Selection_sort(vet_selection, n); //Ordena o vetor do selection
     end = clock();
-    time =((double)end - start)/CLOCKS_PER_SEC;
-    printVet(&vet_selection, n);    
+    time =((double)end - start)/CLOCKS_PER_SEC;    
     printf("Tempo Selection: %lf ms, Comparacoes: %d \n", time*1000, cont);
-    start = clock();
+    start = clock(); //Conta o tempo de insertion
     cont = insertion_sort(vet_insertion, n); //Ordena o vetor do insertion
     end = clock();
     time =((double)end - start)/CLOCKS_PER_SEC;
-    printVet(&vet_insertion, n);
     printf("Tempo insertion: %lf ms, Comparacoes: %d \n", time*1000, cont); 
     return 0;
 }
