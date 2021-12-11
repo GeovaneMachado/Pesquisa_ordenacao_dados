@@ -2,7 +2,39 @@
 #include<stdlib.h>
 #include<time.h>
 
+void swap(int vet[], int i, int j)
+{
+    int aux;
+    aux = vet[j];         //
+    vet[j] = vet[i];       //
+    vet[i] = aux;     //
+}
 
+int particiona(int vet[], int inicio, int fim)
+{
+    int posPivo =fim;
+    int j = inicio;
+    for(int i =inicio;i<fim;i++)
+    {
+        if(vet[i]<=vet[posPivo])
+        {
+            swap(vet, i, j);
+            j++;
+        }
+    }
+    if(vet[j]>vet[posPivo]) swap(vet, j, posPivo);
+    return posPivo;
+}
+
+void quick(int vet[], int inicio, int fim)
+{
+    if(inicio<fim)
+    {
+        int posPivo = particiona(vet, inicio, fim);
+        quick(vet, inicio, posPivo -1);
+        quick(vet, posPivo +1, fim);
+    }
+}
 
 void intercala(int vet[], int inicio,int meio, int fim)
 {
@@ -106,28 +138,30 @@ void print(int vet[], int n)
 
 int main()
 {
-    int n, i, cont; 
+    int n, i; 
     double time;
     clock_t start, end;
     printf("Digite o tamanho do vetor: ");
     scanf("%d", &n);
     int vet_merge[n], vet_quick[n], vet_heap[n]; //Cria os vetores que vão ser ordenados
     cria_vetor(vet_merge, vet_quick, vet_heap, n); //Insere o valor nos vetores 
-    merge(vet_merge, 0, n);
-    print(vet_merge, n);
+    start = clock();//Conta o tempo 
+    quick(vet_quick, 0, n);
+    end = clock();
+    time =((double)end - start)/CLOCKS_PER_SEC;   
+    print(vet_quick, n); 
+    printf("Tempo Quick: %lf ms\n", time*1000);
     /*=================================================================================================
     start = clock(); //Conta o tempo 
+    merge(vet_merge, 0, n);
     end = clock();
     time =((double)end - start)/CLOCKS_PER_SEC;    
-    printf("Tempo Merge: %lf ms, Comparacoes: %d \n", time*1000, cont);
-    start = clock();//Conta o tempo 
-    end = clock();
-    time =((double)end - start)/CLOCKS_PER_SEC;    
-    printf("Tempo Quick: %lf ms, Comparacoes: %d \n", time*1000, cont);
+    print(vet_merge, n);
+    printf("Tempo Merge: %lf ms\n", time*1000);
     start = clock(); //Conta o tempo 
     end = clock();
     time =((double)end - start)/CLOCKS_PER_SEC;
-    printf("Tempo Heap: %lf ms, Comparacoes: %d \n", time*1000, cont); 
+    printf("Tempo Heap: %lf ms\n", time*1000, cont); 
     ===================================================================================================*/
     return 0;
 }
