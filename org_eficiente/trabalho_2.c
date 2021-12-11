@@ -6,14 +6,20 @@
 
 void intercala(int vet[], int inicio,int meio, int fim)
 {
-    int *aux = (int *)malloc(sizeof(fim - inicio +1));
-    int i = inicio, j = meio + 1, k = 0;
+    int *aux = (int *)malloc((fim - inicio +1)*sizeof(int));
+    int i = inicio;
+    int j = meio + 1;
+    int k = 0;
     while (i<=meio && j<= fim)
     {
-        if(vet[i] <=vet[j]) i++;
-        else
+        if(vet[i] <=vet[j])
         {
             aux[k] = vet[i];
+            i++;  
+        } 
+        else
+        {
+            aux[k] = vet[j];
             j++;
         }
         k++;
@@ -27,9 +33,23 @@ void intercala(int vet[], int inicio,int meio, int fim)
     while(j<=fim)
     {
         aux[k] = vet[j];
+        k++;
+        j++;
     }
+    for(k=inicio;k<=fim;k++) vet[k] = aux[k-inicio];
+    free(aux);
 }
 
+void merge(int vet[], int inicio, int fim)
+{
+    if(inicio<fim)
+    {
+        int meio = (inicio + fim)/2;
+        merge(vet, inicio, meio);
+        merge(vet, meio+1,fim);
+        intercala(vet, inicio, meio, fim);
+    }
+}
 
 //MENU DO PROGRAMA, ESCOLHE A ORDEM DE ORGANIZA
 
@@ -93,7 +113,8 @@ int main()
     scanf("%d", &n);
     int vet_merge[n], vet_quick[n], vet_heap[n]; //Cria os vetores que vão ser ordenados
     cria_vetor(vet_merge, vet_quick, vet_heap, n); //Insere o valor nos vetores 
-    print(vet_heap, n);
+    merge(vet_merge, 0, n);
+    print(vet_merge, n);
     /*=================================================================================================
     start = clock(); //Conta o tempo 
     end = clock();
