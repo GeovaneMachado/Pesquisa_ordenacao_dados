@@ -2,27 +2,27 @@
 #include<stdlib.h>
 #include<time.h>
 
-void swap(int vet[], int i, int j)
+void swap(int vet[], int i, int j)      //Faz a troca de um valor de m vetor da posição i para a posição j
 {
     int aux;
-    aux = vet[j];         //
-    vet[j] = vet[i];       //
-    vet[i] = aux;     //
+    aux = vet[j];        
+    vet[j] = vet[i];       
+    vet[i] = aux;     
 }
 
-int particiona(int vet[], int inicio, int fim)
+int particiona(int vet[], int inicio, int fim) // Vai particiona o vetor do Quick 
 {
-    int posPivo =fim;
+    int posPivo =fim; //Pivo sera o ultimo da partição
     int j = inicio;
     for(int i =inicio;i<fim;i++)
     {
-        if(vet[i]<=vet[posPivo])
+        if(vet[i]<=vet[posPivo]) //Se o valor na posição i for menor ou igual ao pivo faz a troca entre j e i
         {
             swap(vet, i, j);
             j++;
         }
     }
-    if(vet[j]>vet[posPivo]) swap(vet, j, posPivo);
+    if(vet[j]>vet[posPivo]) swap(vet, j, posPivo);  // Se o valor na posição j for maior que o pivo faz a troca entre eles
     return posPivo;
 }
 
@@ -30,13 +30,13 @@ void quick(int vet[], int inicio, int fim)
 {
     if(inicio<fim)
     {
-        int posPivo = particiona(vet, inicio, fim);
-        quick(vet, inicio, posPivo -1);
-        quick(vet, posPivo +1, fim);
+        int posPivo = particiona(vet, inicio, fim); //Vai definir a posição do pivo no vetor
+        quick(vet, inicio, posPivo -1); //Chama a função recursivamente para o lado esquerdo do pivo
+        quick(vet, posPivo +1, fim);        //Chama a função recursivamente para o lado direito do pivo
     }
 }
 
-void intercala(int vet[], int inicio,int meio, int fim)
+void intercala(int vet[], int inicio,int meio, int fim) 
 {
     int *aux = (int *)malloc((fim - inicio +1)*sizeof(int));
     int i = inicio;
@@ -76,12 +76,39 @@ void merge(int vet[], int inicio, int fim)
 {
     if(inicio<fim)
     {
-        int meio = (inicio + fim)/2;
-        merge(vet, inicio, meio);
-        merge(vet, meio+1,fim);
-        intercala(vet, inicio, meio, fim);
+        int meio = (inicio + fim)/2; //encontra a metade do vetor
+        merge(vet, inicio, meio); //chama a função recursivamente para dividir do lado esquerdo do vetor
+        merge(vet, meio+1,fim); //chama a função recursivamente para dividir do lado direito do vetor
+        intercala(vet, inicio, meio, fim); 
     }
 }
+
+void heap(int vet[], int n)
+{
+    int i;
+    for(i= n/2-1; i >= 0; i--) CriaHeap(vet, i, n);
+    for(i = n-1; i >= 1; i--)
+    {
+        swap(vet, 0, i);
+        CriaHeap(vet, 0, i);
+    }
+}
+
+void CriaHeap(int vet[], int i, int n)
+{
+    int maior = i;
+    int left = 2*i+1; 
+    int right = 2*i+2;
+    if(left<n && vet[left]>vet[maior]) maior = left;
+    if(right<n && vet[right]>vet[maior]) maior = right;
+    if(maior!=i)
+    {
+        swap(vet, i, maior);
+        CriaHeap(vet, maior, n);
+    }
+}
+
+
 
 //MENU DO PROGRAMA, ESCOLHE A ORDEM DE ORGANIZA
 
@@ -145,23 +172,20 @@ int main()
     scanf("%d", &n);
     int vet_merge[n], vet_quick[n], vet_heap[n]; //Cria os vetores que vão ser ordenados
     cria_vetor(vet_merge, vet_quick, vet_heap, n); //Insere o valor nos vetores 
-    start = clock();//Conta o tempo 
-    quick(vet_quick, 0, n);
-    end = clock();
-    time =((double)end - start)/CLOCKS_PER_SEC;   
-    print(vet_quick, n); 
-    printf("Tempo Quick: %lf ms\n", time*1000);
-    /*=================================================================================================
-    start = clock(); //Conta o tempo 
-    merge(vet_merge, 0, n);
+    start = clock(); //Conta o tempo que leva para a função executar
+    merge(vet_merge, 0, n); //Organiza pela função merge
     end = clock();
     time =((double)end - start)/CLOCKS_PER_SEC;    
-    print(vet_merge, n);
     printf("Tempo Merge: %lf ms\n", time*1000);
-    start = clock(); //Conta o tempo 
+    start = clock();
+    quick(vet_quick, 0, n);//Organiza pela função quick
+    end = clock();
+    time =((double)end - start)/CLOCKS_PER_SEC;   
+    printf("Tempo Quick: %lf ms\n", time*1000);
+    start = clock(); 
+    heap(vet_heap, n); //Organiza pela função heap
     end = clock();
     time =((double)end - start)/CLOCKS_PER_SEC;
-    printf("Tempo Heap: %lf ms\n", time*1000, cont); 
-    ===================================================================================================*/
+    printf("Tempo Heap: %lf ms\n", time*1000);
     return 0;
 }
