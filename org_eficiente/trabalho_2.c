@@ -1,3 +1,4 @@
+//Nome: Geovane Machado dos Santos
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
@@ -38,37 +39,37 @@ void quick(int vet[], int inicio, int fim)
 
 void intercala(int vet[], int inicio,int meio, int fim) 
 {
-    int *aux = (int *)malloc((fim - inicio +1)*sizeof(int));
+    int *aux = (int *)malloc((fim - inicio +1)*sizeof(int)); //vetor auxiliar que guarda os valores ordenados
     int i = inicio;
     int j = meio + 1;
     int k = 0;
     while (i<=meio && j<= fim)
     {
-        if(vet[i] <=vet[j])
+        if(vet[i] <=vet[j]) //Se o valor da posição i no vetor for menor que da posição j insere o i valor na posição k do aux 
         {
             aux[k] = vet[i];
             i++;  
         } 
-        else
+        else //se não insere o j
         {
             aux[k] = vet[j];
             j++;
         }
         k++;
     }
-    while(i<=meio)
+    while(i<=meio)  //Faz a inserção do valor ordenado na primeira parte do vetor
     {
         aux[k] = vet[i];
         k++;
         i++;
     }
-    while(j<=fim)
+    while(j<=fim) //Faz a inserção do valor ordenado na segunda parte do vetor
     {
         aux[k] = vet[j];
         k++;
         j++;
     }
-    for(k=inicio;k<=fim;k++) vet[k] = aux[k-inicio];
+    for(k=inicio;k<=fim;k++) vet[k] = aux[k-inicio]; //O vetor original recebe os dados ordenados
     free(aux);
 }
 
@@ -86,11 +87,11 @@ void merge(int vet[], int inicio, int fim)
 void heap(int vet[], int n)
 {
     int i;
-    for(i= n/2-1; i >= 0; i--) CriaHeap(vet, i, n);
+    for(i= n/2-1; i >= 0; i--) CriaHeap(vet, i, n); //Organiza o heap da subarvore 
     for(i = n-1; i >= 1; i--)
     {
         swap(vet, 0, i);
-        CriaHeap(vet, 0, i);
+        CriaHeap(vet, 0, i); //Vai reorganizar deixando de fora os ordenados
     }
 }
 
@@ -99,12 +100,12 @@ void CriaHeap(int vet[], int i, int n)
     int maior = i;
     int left = 2*i+1; 
     int right = 2*i+2;
-    if(left<n && vet[left]>vet[maior]) maior = left;
-    if(right<n && vet[right]>vet[maior]) maior = right;
-    if(maior!=i)
+    if(left<n && vet[left]>vet[maior]) maior = left;  //Se o left ou right for menor que o tamanho do vetor e a 
+    if(right<n && vet[right]>vet[maior]) maior = right; //posição de um deles no vetor for maior que a variavel maior, muda o valor de maior
+    if(maior!=i) //Se a raiz não for o valor maior faz a troca com o maior valor
     {
         swap(vet, i, maior);
-        CriaHeap(vet, maior, n);
+        CriaHeap(vet, maior, n); //Recusividade para as subarvores
     }
 }
 
@@ -156,11 +157,6 @@ void cria_vetor(int vet_merge[], int vet_quick[], int vet_heap[], int tamanho)
             vet_heap[i] = valor;
         }
     }
-}
-
-void print(int vet[], int n)
-{
-    for(int i = 0; i<n;i++)printf("valor %d: %d\n", i, vet[i]);
 }
 
 int main()
