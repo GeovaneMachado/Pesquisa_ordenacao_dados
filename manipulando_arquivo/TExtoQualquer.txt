@@ -1,0 +1,5 @@
+Escreva um programa que abra um arquivo contendo 
+um texto qualquer e conte o número de caracteres 
+de cada tipo (espaços em branco, quebras de linha 
+e caracteres em geral) presentes no mesmo. Exiba 
+as 3 contagens na tela.
